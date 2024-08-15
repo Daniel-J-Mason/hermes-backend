@@ -30,12 +30,11 @@ public class FriendRequestService implements AcceptFriendRequestUseCase, Decline
     @Override
     public boolean acceptRequest(String senderUsername, String receiverUsername) {
         User sender = findUserPort.findUser(senderUsername);
-        
         if (sender == null) {
             throw new UserNotFoundException("Failed to find user: " + senderUsername);
         }
-        User receiver = findUserPort.findUser(receiverUsername);
         
+        User receiver = findUserPort.findUser(receiverUsername);
         if (receiver == null) {
             throw new UserNotFoundException("Failed to find user: " + receiverUsername);
         }
@@ -43,7 +42,6 @@ public class FriendRequestService implements AcceptFriendRequestUseCase, Decline
         FriendRequest friendRequest = new FriendRequest(sender, receiver, Status.ACCEPTED);
         
         boolean isAccepted = updateFriendRequestPort.updateFriendRequest(friendRequest);
-        
         if (!isAccepted) {
             throw new FriendRequestUpdateException("Failed to accept request between " + senderUsername + " and " + receiverUsername);
         }
@@ -53,20 +51,17 @@ public class FriendRequestService implements AcceptFriendRequestUseCase, Decline
     
     @Override
     public boolean deleteRequest(String senderUsername, String receiverUsername) {
-        
         User sender = findUserPort.findUser(senderUsername);
-        
         if (sender == null) {
             throw new UserNotFoundException("Failed to find user: " + senderUsername);
         }
-        User receiver = findUserPort.findUser(receiverUsername);
         
+        User receiver = findUserPort.findUser(receiverUsername);
         if (receiver == null) {
             throw new UserNotFoundException("Failed to find user: " + receiverUsername);
         }
         
         boolean isDeleted = deleteFriendRequestPort.deleteFriendRequest(senderUsername, receiverUsername);
-        
         if (!isDeleted) {
             throw new FriendRequestDeletionException("Failed to delete friend request between " + senderUsername + " and " + receiverUsername);
         }
@@ -77,12 +72,11 @@ public class FriendRequestService implements AcceptFriendRequestUseCase, Decline
     @Override
     public boolean declineRequest(String senderUsername, String receiverUsername) {
         User sender = findUserPort.findUser(senderUsername);
-        
         if (sender == null) {
             throw new UserNotFoundException("Failed to find user: " + senderUsername);
         }
-        User receiver = findUserPort.findUser(receiverUsername);
         
+        User receiver = findUserPort.findUser(receiverUsername);
         if (receiver == null) {
             throw new UserNotFoundException("Failed to find user: " + receiverUsername);
         }
@@ -90,7 +84,6 @@ public class FriendRequestService implements AcceptFriendRequestUseCase, Decline
         FriendRequest friendRequest = new FriendRequest(sender, receiver, Status.DECLINED);
         
         boolean isDeclined = updateFriendRequestPort.updateFriendRequest(friendRequest);
-        
         if (!isDeclined) {
             throw new FriendRequestUpdateException("Failed to decline request between " + senderUsername + " and " + receiverUsername);
         }
@@ -101,12 +94,11 @@ public class FriendRequestService implements AcceptFriendRequestUseCase, Decline
     @Override
     public FriendRequest sendRequest(String senderUsername, String receiverUsername) {
         User sender = findUserPort.findUser(senderUsername);
-        
         if (sender == null) {
             throw new UserNotFoundException("Failed to find user: " + senderUsername);
         }
-        User receiver = findUserPort.findUser(receiverUsername);
         
+        User receiver = findUserPort.findUser(receiverUsername);
         if (receiver == null) {
             throw new UserNotFoundException("Failed to find user: " + receiverUsername);
         }
@@ -114,7 +106,6 @@ public class FriendRequestService implements AcceptFriendRequestUseCase, Decline
         FriendRequest friendRequest = new FriendRequest(sender, receiver, Status.PENDING);
         
         FriendRequest createdRequest = createFriendRequestPort.createRequest(friendRequest);
-        
         if (createdRequest == null) {
             throw new FriendRequestCreationException("Failed to create friend request between " + senderUsername + " and " + receiverUsername);
         }
@@ -122,5 +113,4 @@ public class FriendRequestService implements AcceptFriendRequestUseCase, Decline
         return createdRequest;
     }
     
-
 }
