@@ -1,11 +1,11 @@
 package com.allthing.hermesbackend.application.domain;
 
-public class Friend {
+public class FriendRequest {
     private User sender;
     private User receiver;
     private Status status;
     
-    public Friend(User sender, User receiver, Status status) {
+    public FriendRequest(User sender, User receiver, Status status) {
         this.sender = sender;
         this.receiver = receiver;
         this.status = status;
