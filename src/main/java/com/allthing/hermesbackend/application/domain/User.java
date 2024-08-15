@@ -1,4 +1,6 @@
 package com.allthing.hermesbackend.application.domain;
 
-public record User(String username, PhoneNumber phoneNumber, Email email) {
+import java.util.UUID;
+
+public record User(UUID uuid, String username, PhoneNumber phoneNumber, Email email) {
 }
