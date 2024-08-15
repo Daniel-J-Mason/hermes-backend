@@ -3,6 +3,6 @@ package com.allthing.hermesbackend.application.ports.outgoing.message;
 import java.util.UUID;
 
 public interface DeleteMessagePort {
-    boolean deleteMessage(UUID publicId);
+    boolean deleteMessage(String username, UUID publicId);
     
 }

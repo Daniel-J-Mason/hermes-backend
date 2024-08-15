@@ -2,6 +2,8 @@ package com.allthing.hermesbackend.application.ports.incoming.message;
 
 import com.allthing.hermesbackend.application.domain.Message;
 
-public interface CreateMessageUseCase {
-    Message createMessage(String username, Message message);
+import java.util.List;
+
+public interface ListUserMessageUseCase {
+    List<Message> getMessages(String username);
 }
