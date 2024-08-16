@@ -4,6 +4,6 @@ import com.allthing.hermesbackend.application.domain.Message;
 
 import java.util.List;
 
-public interface GetMessagesByUsername {
+public interface GetMessagesByUsernamePort {
     List<Message> getMessages(String username);
 }

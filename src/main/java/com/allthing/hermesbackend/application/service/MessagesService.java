@@ -20,7 +20,7 @@ import com.allthing.hermesbackend.application.ports.outgoing.message.CreateMessa
 import com.allthing.hermesbackend.application.ports.outgoing.message.CreateMessagePort;
 import com.allthing.hermesbackend.application.ports.outgoing.message.DeleteMessageLinkPort;
 import com.allthing.hermesbackend.application.ports.outgoing.message.DeleteMessagePort;
-import com.allthing.hermesbackend.application.ports.outgoing.message.GetMessagesByUsername;
+import com.allthing.hermesbackend.application.ports.outgoing.message.GetMessagesByUsernamePort;
 import com.allthing.hermesbackend.application.ports.outgoing.message.UpdateMessagePort;
 import com.allthing.hermesbackend.application.ports.outgoing.user.FindUserPort;
 import lombok.RequiredArgsConstructor;
@@ -40,7 +40,7 @@ public class MessagesService implements CreateMessageUseCase, DeleteMessageUseCa
     private final CreateMessagePort createMessagePort;
     private final DeleteMessagePort deleteMessagePort;
     private final DeleteMessageLinkPort deleteMessageLinkPort;
-    private final GetMessagesByUsername getMessagesByUsername;
+    private final GetMessagesByUsernamePort getMessagesByUsernamePort;
     private final UpdateMessagePort updateMessagePort;
     private final AreFriendsPort areFriendsPort;
     private final FindUserPort findUserPort;
@@ -86,7 +86,7 @@ public class MessagesService implements CreateMessageUseCase, DeleteMessageUseCa
     public List<Message> getMessages(String username) {
         checkUserExists(username);
         
-        List<Message> messages = getMessagesByUsername.getMessages(username);
+        List<Message> messages = getMessagesByUsernamePort.getMessages(username);
         if (messages == null) {
             throw new ServiceException("Failed to fetch messages for user: " + username);
         }

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="create_user_account_message_table" author="daniel-j-mason">
+        <createTable tableName="user_account_message">
+            <column name="userId" type="uuid">
+                <constraints nullable="false"/>
+            </column>
+            <column name="messageId" type="uuid">
+                <constraints nullable="false"/>
+            </column>
+            <column name="action" type="varchar(50)"/>
+        </createTable>
+
+        <addForeignKeyConstraint constraintName="fk_user_account_message_userId"
+                                 baseTableName="user_account_message"
+                                 baseColumnNames="userId"
+                                 referencedTableName="user_account"
+                                 referencedColumnNames="id"/>
+        <addForeignKeyConstraint constraintName="fk_user_account_message_messageId"
+                                 baseTableName="user_account_message"
+                                 baseColumnNames="messageId"
+                                 referencedTableName="message"
+                                 referencedColumnNames="id"/>
+        <addPrimaryKey constraintName="pk_user_account_message"
+                       columnNames="userId, messageId"
+                       tableName="user_account_message"/>
+    </changeSet>
+</databaseChangeLog>

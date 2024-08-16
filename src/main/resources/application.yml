@@ -1,0 +1,10 @@
+spring:
+  liquibase:
+    enabled: true
+    change-log: classpath:db/changelog/hermes-changelog.xml
+
+  datasource:
+    url: ${POSTGRES_URL}
+    username: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
+    driver-class-name: org.postgresql.Driver

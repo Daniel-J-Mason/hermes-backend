@@ -11,7 +11,7 @@ import com.allthing.hermesbackend.application.ports.outgoing.message.CreateMessa
 import com.allthing.hermesbackend.application.ports.outgoing.message.CreateMessagePort;
 import com.allthing.hermesbackend.application.ports.outgoing.message.DeleteMessageLinkPort;
 import com.allthing.hermesbackend.application.ports.outgoing.message.DeleteMessagePort;
-import com.allthing.hermesbackend.application.ports.outgoing.message.GetMessagesByUsername;
+import com.allthing.hermesbackend.application.ports.outgoing.message.GetMessagesByUsernamePort;
 import com.allthing.hermesbackend.application.ports.outgoing.message.UpdateMessagePort;
 import com.allthing.hermesbackend.application.ports.outgoing.user.FindUserPort;
 import org.junit.jupiter.api.BeforeEach;
@@ -44,7 +44,7 @@ public class ListUserMessagesUseCaseTest {
     @Mock
     private DeleteMessageLinkPort deleteMessageLinkPort;
     @Mock
-    private GetMessagesByUsername getMessagesByUsername;
+    private GetMessagesByUsernamePort getMessagesByUsernamePort;
     @Mock
     private UpdateMessagePort updateMessagePort;
     @Mock
@@ -63,7 +63,7 @@ public class ListUserMessagesUseCaseTest {
                 createMessagePort,
                 deleteMessagePort,
                 deleteMessageLinkPort,
-                getMessagesByUsername,
+                getMessagesByUsernamePort,
                 updateMessagePort,
                 areFriendsPort,
                 findUserPort
@@ -81,7 +81,7 @@ public class ListUserMessagesUseCaseTest {
         expectedMessages.add(new Message(secondMessageId, "Title2", "body2", null, mockUser));
         
         when(findUserPort.findUser(username)).thenReturn(mockUser);
-        when(getMessagesByUsername.getMessages(username)).thenReturn(expectedMessages);
+        when(getMessagesByUsernamePort.getMessages(username)).thenReturn(expectedMessages);
         
         List<Message> actualMessages = underTest.getMessages(username);
         
@@ -94,7 +94,7 @@ public class ListUserMessagesUseCaseTest {
         User mockUser = new User(username, null, null);
         
         when(findUserPort.findUser(username)).thenReturn(mockUser);
-        when(getMessagesByUsername.getMessages(username)).thenReturn(null);
+        when(getMessagesByUsernamePort.getMessages(username)).thenReturn(null);
         
         assertThrows(ServiceException.class, () -> underTest.getMessages(username));
     }

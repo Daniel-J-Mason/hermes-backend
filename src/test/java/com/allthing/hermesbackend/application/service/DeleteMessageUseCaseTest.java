@@ -11,7 +11,7 @@ import com.allthing.hermesbackend.application.ports.outgoing.message.CreateMessa
 import com.allthing.hermesbackend.application.ports.outgoing.message.CreateMessagePort;
 import com.allthing.hermesbackend.application.ports.outgoing.message.DeleteMessageLinkPort;
 import com.allthing.hermesbackend.application.ports.outgoing.message.DeleteMessagePort;
-import com.allthing.hermesbackend.application.ports.outgoing.message.GetMessagesByUsername;
+import com.allthing.hermesbackend.application.ports.outgoing.message.GetMessagesByUsernamePort;
 import com.allthing.hermesbackend.application.ports.outgoing.message.UpdateMessagePort;
 import com.allthing.hermesbackend.application.ports.outgoing.user.FindUserPort;
 import org.junit.jupiter.api.BeforeEach;
@@ -46,7 +46,7 @@ public class DeleteMessageUseCaseTest {
     @Mock
     private DeleteMessageLinkPort deleteMessageLinkPort;
     @Mock
-    private GetMessagesByUsername getMessagesByUsername;
+    private GetMessagesByUsernamePort getMessagesByUsernamePort;
     @Mock
     private UpdateMessagePort updateMessagePort;
     @Mock
@@ -65,7 +65,7 @@ public class DeleteMessageUseCaseTest {
                 createMessagePort,
                 deleteMessagePort,
                 deleteMessageLinkPort,
-                getMessagesByUsername,
+                getMessagesByUsernamePort,
                 updateMessagePort,
                 areFriendsPort,
                 findUserPort

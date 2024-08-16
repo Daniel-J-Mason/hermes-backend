@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="create_message_table" author="daniel-j-mason">
+        <createTable tableName="message">
+            <column name="id" type="uuid">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="publicId" type="uuid">
+                <constraints nullable="false"/>
+            </column>
+            <column name="title" type="varchar(255)"/>
+            <column name="body" type="text"/>
+            <column name="scheduledTime" type="varchar(255)"/>
+            <column name="createdBy" type="uuid">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint constraintName="fk_message_createdBy"
+                                 baseTableName="message"
+                                 baseColumnNames="createdBy"
+                                 referencedTableName="user_account"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+
+</databaseChangeLog>

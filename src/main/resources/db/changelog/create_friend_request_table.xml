@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="create_friend_request_table" author="daniel-j-mason">
+        <createTable tableName="friend_request">
+            <column name="senderId" type="uuid">
+                <constraints nullable="false"/>
+            </column>
+            <column name="receiverId" type="uuid">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="varchar(30)"/>
+        </createTable>
+
+        <addForeignKeyConstraint constraintName="fk_friend_request_senderId"
+                                 baseTableName="friend_request"
+                                 baseColumnNames="senderId"
+                                 referencedTableName="user_account"
+                                 referencedColumnNames="id"/>
+        <addForeignKeyConstraint constraintName="fk_friend_request_receiverId"
+                                 baseTableName="friend_request"
+                                 baseColumnNames="receiverId"
+                                 referencedTableName="user_account"
+                                 referencedColumnNames="id"/>
+        <addPrimaryKey constraintName="pk_friend_request"
+                       columnNames="senderId, receiverId"
+                       tableName="friend_request"/>
+    </changeSet>
+
+</databaseChangeLog>
