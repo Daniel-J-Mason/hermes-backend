@@ -73,8 +73,8 @@ public class UpdateMessageUseCaseTest {
     void shouldUpdateMessageWhenUserOwnsMessage() {
         UUID messageId = UUID.randomUUID();
         String username = "username";
-        Message testMessage = new Message(messageId, "Title", "body", null, username);
         User mockUser = new User(username, null, null);
+        Message testMessage = new Message(messageId, "Title", "body", null, mockUser);
         
         when(findUserPort.findUser(username)).thenReturn(mockUser);
         when(checkMessageOwnershipPort.userOwnsMessage(username, testMessage.publicId())).thenReturn(true);
@@ -88,8 +88,8 @@ public class UpdateMessageUseCaseTest {
     void shouldUpdateMessageWhenUserIsLinkedToMessage() {
         UUID messageId = UUID.randomUUID();
         String username = "username";
-        Message testMessage = new Message(messageId, "Title", "body", null, username);
         User mockUser = new User(username, null, null);
+        Message testMessage = new Message(messageId, "Title", "body", null, mockUser);
         
         when(findUserPort.findUser(username)).thenReturn(mockUser);
         when(checkMessageLinksPort.checkUserLinkedToMessage(username, testMessage.publicId())).thenReturn(true);
@@ -103,8 +103,8 @@ public class UpdateMessageUseCaseTest {
     void shouldThrowExceptionWhenUserDoesNotOwnOrLinkedToMessage() {
         UUID messageId = UUID.randomUUID();
         String username = "username";
-        Message testMessage = new Message(messageId, "Title", "body", null, username);
         User mockUser = new User(username, null, null);
+        Message testMessage = new Message(messageId, "Title", "body", null, mockUser);
         
         when(findUserPort.findUser(username)).thenReturn(mockUser);
         when(checkMessageOwnershipPort.userOwnsMessage(username, testMessage.publicId())).thenReturn(false);

@@ -73,10 +73,10 @@ public class CreateMessageUseCaseTest {
     void shouldCreateMessage() {
         String username = "testUsername";
         UUID messageId = UUID.randomUUID();
-        
-        Message messageToCreate = new Message(messageId, "Title", "body", null, username);
-        Message createdMessage = new Message(messageId, "Title", "body", null, username);
         User mockUser = new User(username, null, null);
+        
+        Message messageToCreate = new Message(messageId, "Title", "body", null, mockUser);
+        Message createdMessage = new Message(messageId, "Title", "body", null, mockUser);
         
         when(findUserPort.findUser(username)).thenReturn(mockUser);
         when(createMessagePort.createMessage(username, messageToCreate))
@@ -93,9 +93,9 @@ public class CreateMessageUseCaseTest {
     void shouldThrowWhenMessageNotCreated() {
         String username = "testUsername";
         UUID messageId = UUID.randomUUID();
-        
-        Message messageToCreate = new Message(messageId, "Title", "body", null, username);
         User mockUser = new User(username, null, null);
+        
+        Message messageToCreate = new Message(messageId, "Title", "body", null, mockUser);
         
         when(findUserPort.findUser(username)).thenReturn(mockUser);
         when(createMessagePort.createMessage(username, messageToCreate))
@@ -108,8 +108,9 @@ public class CreateMessageUseCaseTest {
     void shouldThrowWhenUserNotFound() {
         String username = "testUsername";
         UUID messageId = UUID.randomUUID();
+        User mockUser = new User(username, null, null);
         
-        Message messageToCreate = new Message(messageId, "Title", "body", null, username);
+        Message messageToCreate = new Message(messageId, "Title", "body", null, mockUser);
         
         when(findUserPort.findUser(username)).thenReturn(null);
 

@@ -69,7 +69,7 @@ public class MessagesService implements CreateMessageUseCase, DeleteMessageUseCa
         return deleteMessagePort.deleteMessage(username, publicMessageId);
     }
     
-    // If user owns message, and is friends with other user, create a link to message
+    // If user owns message, and is friends with other user, link other user to message
     @Override
     public boolean linkUser(String sendingUsername, String receivingUsername, UUID publicMessageId) {
         checkUserExists(sendingUsername);

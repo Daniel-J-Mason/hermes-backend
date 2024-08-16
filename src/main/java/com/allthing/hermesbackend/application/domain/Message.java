@@ -4,5 +4,5 @@ import org.quartz.CronExpression;
 
 import java.util.UUID;
 
-public record Message(UUID publicId, String title, String body, CronExpression scheduledTime, String creatorUsername) {
+public record Message(UUID publicId, String title, String body, CronExpression scheduledTime, User creator) {
 }

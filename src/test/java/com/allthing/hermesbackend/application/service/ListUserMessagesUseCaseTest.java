@@ -77,8 +77,8 @@ public class ListUserMessagesUseCaseTest {
         UUID firstMessageId = UUID.randomUUID();
         UUID secondMessageId = UUID.randomUUID();
         List<Message> expectedMessages = new ArrayList<>();
-        expectedMessages.add(new Message(firstMessageId, "Title1", "body1", null, username));
-        expectedMessages.add(new Message(secondMessageId, "Title2", "body2", null, username));
+        expectedMessages.add(new Message(firstMessageId, "Title1", "body1", null, mockUser));
+        expectedMessages.add(new Message(secondMessageId, "Title2", "body2", null, mockUser));
         
         when(findUserPort.findUser(username)).thenReturn(mockUser);
         when(getMessagesByUsername.getMessages(username)).thenReturn(expectedMessages);
