@@ -13,9 +13,11 @@ import com.allthing.hermesbackend.application.ports.incoming.friend.DeleteFriend
 import com.allthing.hermesbackend.application.ports.incoming.friend.SendFriendRequestUseCase;
 import com.allthing.hermesbackend.application.ports.outgoing.friend.CreateFriendRequestPort;
 import com.allthing.hermesbackend.application.ports.outgoing.friend.DeleteFriendRequestPort;
+import com.allthing.hermesbackend.application.ports.outgoing.friend.LookupFriendRequestPort;
 import com.allthing.hermesbackend.application.ports.outgoing.friend.UpdateFriendRequestPort;
 import com.allthing.hermesbackend.application.ports.outgoing.user.FindUserPort;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -25,24 +27,18 @@ public class FriendRequestService implements AcceptFriendRequestUseCase, Decline
     private final CreateFriendRequestPort createFriendRequestPort;
     private final DeleteFriendRequestPort deleteFriendRequestPort;
     private final UpdateFriendRequestPort updateFriendRequestPort;
+    private final LookupFriendRequestPort lookupFriendRequestPort;
     private final FindUserPort findUserPort;
     
     @Override
     public boolean acceptRequest(String senderUsername, String receiverUsername) {
-        User sender = findUserPort.findUser(senderUsername);
-        if (sender == null) {
-            throw new UserNotFoundException("Failed to find user: " + senderUsername);
-        }
+        Pair<User, User> users = checkUsersExist(senderUsername, receiverUsername);
         
-        User receiver = findUserPort.findUser(receiverUsername);
-        if (receiver == null) {
-            throw new UserNotFoundException("Failed to find user: " + receiverUsername);
-        }
+        FriendRequest friendRequest = lookupFriendRequestPort.lookupFriendRequest(senderUsername, receiverUsername);
+        friendRequest.acceptFriendRequest();
         
-        FriendRequest friendRequest = new FriendRequest(sender, receiver, Status.ACCEPTED);
-        
-        boolean isAccepted = updateFriendRequestPort.updateFriendRequest(friendRequest);
-        if (!isAccepted) {
+        boolean isUpdated = updateFriendRequestPort.updateFriendRequest(friendRequest);
+        if (!isUpdated) {
             throw new FriendRequestUpdateException("Failed to accept request between " + senderUsername + " and " + receiverUsername);
         }
         
@@ -51,37 +47,23 @@ public class FriendRequestService implements AcceptFriendRequestUseCase, Decline
     
     @Override
     public boolean deleteRequest(String senderUsername, String receiverUsername) {
-        User sender = findUserPort.findUser(senderUsername);
-        if (sender == null) {
-            throw new UserNotFoundException("Failed to find user: " + senderUsername);
-        }
-        
-        User receiver = findUserPort.findUser(receiverUsername);
-        if (receiver == null) {
-            throw new UserNotFoundException("Failed to find user: " + receiverUsername);
-        }
+        Pair<User, User> users = checkUsersExist(senderUsername, receiverUsername);
         
         boolean isDeleted = deleteFriendRequestPort.deleteFriendRequest(senderUsername, receiverUsername);
+        
         if (!isDeleted) {
             throw new FriendRequestDeletionException("Failed to delete friend request between " + senderUsername + " and " + receiverUsername);
         }
         
-        return false;
+        return true;
     }
     
     @Override
     public boolean declineRequest(String senderUsername, String receiverUsername) {
-        User sender = findUserPort.findUser(senderUsername);
-        if (sender == null) {
-            throw new UserNotFoundException("Failed to find user: " + senderUsername);
-        }
+        Pair<User, User> users = checkUsersExist(senderUsername, receiverUsername);
         
-        User receiver = findUserPort.findUser(receiverUsername);
-        if (receiver == null) {
-            throw new UserNotFoundException("Failed to find user: " + receiverUsername);
-        }
-        
-        FriendRequest friendRequest = new FriendRequest(sender, receiver, Status.DECLINED);
+        FriendRequest friendRequest = lookupFriendRequestPort.lookupFriendRequest(senderUsername, receiverUsername);
+        friendRequest.declineFriendRequest();
         
         boolean isDeclined = updateFriendRequestPort.updateFriendRequest(friendRequest);
         if (!isDeclined) {
@@ -93,6 +75,20 @@ public class FriendRequestService implements AcceptFriendRequestUseCase, Decline
     
     @Override
     public FriendRequest sendRequest(String senderUsername, String receiverUsername) {
+      
+        Pair<User, User> users = checkUsersExist(senderUsername, receiverUsername);
+        
+        FriendRequest friendRequest = new FriendRequest(users.getLeft(), users.getRight(), Status.PENDING);
+        
+        FriendRequest createdRequest = createFriendRequestPort.createRequest(friendRequest);
+        if (createdRequest == null) {
+            throw new FriendRequestCreationException("Failed to create friend request between " + senderUsername + " and " + receiverUsername);
+        }
+        
+        return createdRequest;
+    }
+    
+    private Pair<User, User> checkUsersExist(String senderUsername, String receiverUsername) {
         User sender = findUserPort.findUser(senderUsername);
         if (sender == null) {
             throw new UserNotFoundException("Failed to find user: " + senderUsername);
@@ -103,14 +99,7 @@ public class FriendRequestService implements AcceptFriendRequestUseCase, Decline
             throw new UserNotFoundException("Failed to find user: " + receiverUsername);
         }
         
-        FriendRequest friendRequest = new FriendRequest(sender, receiver, Status.PENDING);
-        
-        FriendRequest createdRequest = createFriendRequestPort.createRequest(friendRequest);
-        if (createdRequest == null) {
-            throw new FriendRequestCreationException("Failed to create friend request between " + senderUsername + " and " + receiverUsername);
-        }
-        
-        return createdRequest;
+        return Pair.of(sender, receiver);
     }
     
 }

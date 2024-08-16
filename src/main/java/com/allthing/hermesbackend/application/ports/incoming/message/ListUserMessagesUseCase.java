@@ -4,6 +4,6 @@ import com.allthing.hermesbackend.application.domain.Message;
 
 import java.util.List;
 
-public interface ListUserMessageUseCase {
+public interface ListUserMessagesUseCase {
     List<Message> getMessages(String username);
 }

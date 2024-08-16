@@ -1,5 +1,13 @@
 package com.allthing.hermesbackend.application.domain;
 
+import com.allthing.hermesbackend.application.exception.friendrequest.IllegalStatusChangeException;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
+@Getter
+@Setter
+@ToString
 public class FriendRequest {
     private User sender;
     private User receiver;
@@ -15,7 +23,15 @@ public class FriendRequest {
         if (status == Status.PENDING) {
             status = Status.ACCEPTED;
         } else {
-            throw new RuntimeException("Cannot accept non-pending friend request");
+            throw new IllegalStatusChangeException("Cannot accept non-pending friend request");
+        }
+    }
+    
+    public void declineFriendRequest() {
+        if (status == Status.PENDING) {
+            status = Status.DECLINED;
+        } else {
+            throw new IllegalStatusChangeException("Cannot decline non-pending friend request");
         }
     }
 }
